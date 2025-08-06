@@ -64,6 +64,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 =======
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
 
-![App Screenshot](./public/n8n-cv-form-validation)
-![App Screenshot](./public/n8n-cv-form-validation-workflow)
->>>>>>> 4147aeb1b3f646e1ec257414e1fcc16becabf619
+![App Screenshot](./public/n8n-cv-form-validation.png)
+![App Screenshot](./public/n8n-cv-form-validation-workflow.png)
