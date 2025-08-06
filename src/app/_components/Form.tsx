@@ -86,7 +86,7 @@ function Form() {
     }
   };
 
-  const getInputClassName = (hasError: boolean) => {
+  const getInputClassName = (hasError: any) => {
     const baseClasses = "w-full rounded px-3 py-2 focus:outline-none";
     const errorClasses =
       "border border-red-500 focus:ring-2 focus:ring-red-500";
