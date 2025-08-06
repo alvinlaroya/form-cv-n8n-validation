@@ -16,18 +16,13 @@ function Form() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
+    reset
   } = useForm<SchemaProps>({
     resolver: zodResolver(profileSchema),
   });
 
   const [isValidate, setIsValidate] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [invalidFields, setInavalidFields] = useState([
-    {
-      property: "",
-      message: "",
-    },
-  ]);
   const [cvUrl, setCVUrl] = useState("");
 
   const profileMutation = api.profile.create.useMutation({
@@ -40,22 +35,18 @@ function Form() {
   });
 
   const submitForm = (data: SchemaProps) => {
+    reset();
     profileMutation.mutate({
       ...data,
       skills: data.skills.split(","),
       cv: cvUrl,
     });
     setIsValidate(false);
+
   };
 
   const validateForm = async (data: SchemaProps) => {
     setIsValidate(false);
-    setInavalidFields([
-      {
-        property: "",
-        message: "",
-      },
-    ]);
 
     const formData = new FormData();
     formData.append("fullname", data.fullname);
@@ -80,10 +71,13 @@ function Form() {
         setIsValid(true);
       } else {
         setIsValid(validation.valid);
-        setInavalidFields((prevFields) => [
-          ...prevFields,
-          ...validation.invalidFields,
-        ]);
+
+        validation.invalidFields.forEach((item: { property: string; message: string }) => {
+          setError(item.property, {
+            type: "manual",
+            message: item.message || "This field is required", // Use dynamic message
+          });
+        });
       }
     } catch (error) {
       alert(error);
@@ -92,16 +86,7 @@ function Form() {
     }
   };
 
-  useEffect(() => {
-    invalidFields.forEach((item) => {
-      setError(item.property, {
-        type: "manual",
-        message: item.message || "This field is required", // Use dynamic message
-      });
-    });
-  }, [invalidFields]);
-
-  const getInputClassName = (hasError) => {
+  const getInputClassName = (hasError: boolean) => {
     const baseClasses = "w-full rounded px-3 py-2 focus:outline-none";
     const errorClasses =
       "border border-red-500 focus:ring-2 focus:ring-red-500";

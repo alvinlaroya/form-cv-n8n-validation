@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const n8nWebhookUrlProd = process.env.N8N_WEBHOOK_URL_PROD;
     const formData = await request.formData();
     const cvFormData = new FormData();
-    const file = formData.get("file")
+    const file = formData.get("file") as File
     cvFormData.append("file", file);
 
     try {
