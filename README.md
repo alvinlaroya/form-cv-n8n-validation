@@ -25,6 +25,7 @@ This will apply the necessary schema to your local database using Prisma.
 
 ### 3. Open Prisma Studio (Optional)
 
+<<<<<<< HEAD
 To view and manage your database records visually:
 
 ```bash
@@ -60,3 +61,9 @@ Your app should now be running at `http://localhost:3000`.
 ## 🙌 Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you’d like to change.
+=======
+Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+![App Screenshot](./public/n8n-cv-form-validation)
+![App Screenshot](./public/n8n-cv-form-validation-workflow)
+>>>>>>> 4147aeb1b3f646e1ec257414e1fcc16becabf619
