@@ -15,13 +15,12 @@ function Form() {
     register,
     handleSubmit,
     setError,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SchemaProps>({
     resolver: zodResolver(profileSchema),
   });
 
   const [isValidate, setIsValidate] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [invalidFields, setInavalidFields] = useState([
     {
@@ -50,7 +49,6 @@ function Form() {
   };
 
   const validateForm = async (data: SchemaProps) => {
-    setIsLoading(true);
     setIsValidate(false);
     setInavalidFields([
       {
@@ -90,7 +88,6 @@ function Form() {
     } catch (error) {
       alert(error);
     } finally {
-      setIsLoading(false);
       setIsValidate(true);
     }
   };
@@ -116,19 +113,13 @@ function Form() {
 
   return (
     <div className="mx-auto max-w-md bg-white p-6 text-black">
-      {!isValidate ? (
-        <></>
-      ) : (
-        <>
-          {isValid && (
-            <div className="mb-4 border border-green-500 p-3 text-green-500">
-              <p className="mb-2 text-lg font-bold text-green-500">
-                Validation Passed!
-              </p>
-              <span>Please submit your profile</span>
-            </div>
-          )}
-        </>
+      {isValid && isValidate && (
+        <div className="mb-4 border border-green-500 p-3 text-green-500">
+          <p className="mb-2 text-lg font-bold text-green-500">
+            Validation Passed!
+          </p>
+          <span>Please submit your profile</span>
+        </div>
       )}
       <div onSubmit={handleSubmit(submitForm)} className="space-y-4">
         <div>
@@ -142,7 +133,7 @@ function Form() {
             id="fullname"
             type="text"
             {...register("fullname")}
-            disabled={isLoading}
+            disabled={isSubmitting}
             className={getInputClassName(errors?.fullname)}
           />
           {errors?.fullname && (
@@ -163,7 +154,7 @@ function Form() {
             id="email"
             type="email"
             {...register("email")}
-            disabled={isLoading}
+            disabled={isSubmitting}
             className={getInputClassName(errors?.email)}
           />
           {errors?.email && (
@@ -184,7 +175,7 @@ function Form() {
             id="phone"
             type="tel"
             {...register("phone")}
-            disabled={isLoading}
+            disabled={isSubmitting}
             className={getInputClassName(errors?.phone)}
           />
           {errors?.phone && (
@@ -205,7 +196,7 @@ function Form() {
             id="skills"
             type="text"
             {...register("skills")}
-            disabled={isLoading}
+            disabled={isSubmitting}
             placeholder="e.g. vue, react, svelte"
             className={getInputClassName(errors?.skills)}
           />
@@ -228,7 +219,7 @@ function Form() {
             id="experience"
             {...register("experience")}
             rows={4}
-            disabled={isLoading}
+            disabled={isSubmitting}
             className={getInputClassName(errors?.experience)}
           />
           {errors?.experience && (
@@ -250,7 +241,7 @@ function Form() {
             type="file"
             accept=".pdf"
             {...register("cv")}
-            disabled={isLoading}
+            disabled={isSubmitting}
             className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           {errors?.cv && (
@@ -260,33 +251,18 @@ function Form() {
           )}
         </div>
 
-        {isValidate && isValid ? (
-          <button
-            type="button"
-            onClick={handleSubmit(submitForm)}
-            className={`w-full rounded bg-blue-600 px-4 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span>Validating...</span>
-            ) : (
-              <span>Submit Application</span>
-            )}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleSubmit(validateForm)}
-            className={`w-full rounded bg-blue-600 px-4 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span>Validating...</span>
-            ) : (
-              <span>Validate Application</span>
-            )}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleSubmit(isValidate && isValid ? submitForm : validateForm)}
+          className={`w-full rounded bg-blue-600 px-4 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 ${isSubmitting ? "cursor-not-allowed" : "cursor-pointer"}`}
+          disabled={isSubmitting}
+        >
+          {isValidate && isValid ? (
+            <span>Submit Application</span>
+          ) : (
+            <span>{isSubmitting ? 'Validating...' : 'Validate Application'}</span>
+          )}
+        </button>
       </div>
     </div>
   );
